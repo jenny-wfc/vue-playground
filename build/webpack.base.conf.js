@@ -2,7 +2,12 @@ var path = require('path')
 var utils = require('./utils')
 var config = require('../config')
 var vueLoaderConfig = require('./vue-loader.conf')
-
+const museUiThemePath = path.join(
+  __dirname,
+  'node_modules',
+  'muse-ui',
+  'src/styles/themes/variables/default.less'
+)
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
 }
@@ -22,7 +27,8 @@ module.exports = {
     extensions: ['.js', '.vue', '.json'],
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
-      '@': resolve('src')
+      '@': resolve('src'),
+      'muse-components': 'muse-ui/src'
     }
   },
   module: {
@@ -30,7 +36,23 @@ module.exports = {
       {
         test: /\.vue$/,
         loader: 'vue-loader',
-        options: vueLoaderConfig
+        options: {
+          loaders: {
+            less: [
+              'vue-style-loader',
+              'css-loader',
+              {
+                loader: 'less-loader',
+                options: {
+                  globalVars: {
+                    museUiTheme: `'${museUiThemePath}'`,
+                  }
+                }
+              }
+            ]
+          },
+          vueLoaderConfig
+        }
       },
       {
         test: /\.js$/,
@@ -60,6 +82,10 @@ module.exports = {
           limit: 10000,
           name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
         }
+      },
+      {
+        test: /muse-ui.src.*?js$/,
+        loader: 'babel-loader'
       }
     ]
   }

@@ -1,5 +1,6 @@
 <template>
   <div class="hello">
+    <h1>{{$lang.messages.hello_world}}</h1>
     <h1>Hello {{ name }}!</h1>
     <h1>{{ msg }}</h1>
     <h2>Essential Links</h2>
@@ -18,29 +19,70 @@
       <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
       <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
     </ul>
+
+    <mu-tabs :value="theme" @change="changeTheme">
+      <mu-tab title="LIGHT (DEFAULT)" value="light"/>
+      <mu-tab title="DARK" value="dark"/>
+      <mu-tab title="CARBON" value="carbon"/>
+      <mu-tab title="TEAL" value="teal"/>
+    </mu-tabs>
+
   </div>
 </template>
 
 <script>
 import axios from 'axios';
-import VueGettext from 'vue-gettext'
+import Vue from 'vue';
+import MuseUI from 'muse-ui'
+import 'muse-ui/dist/muse-ui.css';
+import 'muse-ui/dist/theme-carbon.css';
+
+/****for ui theme usage****/
+import light from 'muse-ui/dist/theme-default.css';
+import dark from 'muse-ui/dist/theme-dark.css';
+import carbon from 'muse-ui/dist/theme-carbon.css';
+import teal from 'muse-ui/dist/theme-teal.css';
 
 /****localization*****/
-// from ln29 to ln35 having error
-// var Vue = require('vue');
-// var Lang = require('vuejs-localization');
-//
-// //specify lang folder, in this case './lang'
-// Lang.requireAll(require.context('./lang/', true, /\.js$/));
-//
-// Vue.use(Lang);
+var Lang = require('vuejs-localization');
+Lang.requireAll(require.context('../../lang/', true, /\.js$/));
+Vue.use(Lang);
+
+/*****muse-ui*****/
+Vue.use(MuseUI);
 
 export default {
   name: 'hello',
   data: function(){
     return {
       msg: 'Welcome to Your Vue.js App',
-      name: 'Jenny'
+      name: 'Jenny',
+      theme: 'light',
+      themes: {
+        light,
+        dark,
+        carbon,
+        teal
+      }
+    }
+  },
+  mounted: function(){
+    this.$lang.setLang('pt');
+  },
+  methods: {
+    changeTheme (theme) {
+      this.theme = theme
+      const styleEl = this.getThemeStyle()
+      styleEl.innerHTML = this.themes[theme] || ''
+    },
+    getThemeStyle () {
+      const themeId = 'muse-theme'
+      let styleEl = document.getElementById(themeId)
+      if (styleEl) return styleEl
+      styleEl = document.createElement('style')
+      styleEl.id = themeId
+      document.body.appendChild(styleEl)
+      return styleEl
     }
   }
 
