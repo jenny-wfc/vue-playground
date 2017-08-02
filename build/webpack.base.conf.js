@@ -86,6 +86,10 @@ module.exports = {
       {
         test: /muse-ui.src.*?js$/,
         loader: 'babel-loader'
+      },
+      {
+        test: /\.txt$/,
+        use: 'raw-loader'
       }
     ]
   }

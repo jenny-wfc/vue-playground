@@ -38,10 +38,10 @@ import 'muse-ui/dist/muse-ui.css';
 import 'muse-ui/dist/theme-carbon.css';
 
 /****for ui theme usage****/
-import light from 'muse-ui/dist/theme-default.css';
-import dark from 'muse-ui/dist/theme-dark.css';
-import carbon from 'muse-ui/dist/theme-carbon.css';
-import teal from 'muse-ui/dist/theme-teal.css';
+import light from '!raw-loader!muse-ui/dist/theme-default.css'
+import dark from '!raw-loader!muse-ui/dist/theme-dark.css'
+import carbon from '!raw-loader!muse-ui/dist/theme-carbon.css'
+import teal from '!raw-loader!muse-ui/dist/theme-teal.css'
 
 /****localization*****/
 var Lang = require('vuejs-localization');
@@ -71,18 +71,18 @@ export default {
   },
   methods: {
     changeTheme (theme) {
-      this.theme = theme
-      const styleEl = this.getThemeStyle()
-      styleEl.innerHTML = this.themes[theme] || ''
+      this.theme = theme;
+      const styleEl = this.getThemeStyle();
+      styleEl.innerHTML = this.themes[theme] || '';
     },
     getThemeStyle () {
-      const themeId = 'muse-theme'
-      let styleEl = document.getElementById(themeId)
-      if (styleEl) return styleEl
-      styleEl = document.createElement('style')
-      styleEl.id = themeId
-      document.body.appendChild(styleEl)
-      return styleEl
+      const themeId = 'muse-ui';
+      let styleEl = document.getElementById(themeId);
+      if (styleEl) return styleEl;
+      styleEl = document.createElement('style');
+      styleEl.id = themeId;
+      document.body.appendChild(styleEl);
+      return styleEl;
     }
   }
 
